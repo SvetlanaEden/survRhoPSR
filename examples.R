@@ -1,5 +1,4 @@
-#source("sourcesFunctions.R")
-source("/Users/svetlanaeden/stuff/RStuff/survRhoPSR/sourcesFunctions.R")
+source("sourcesFunctions.R")
 
 library(survival)
 data(diabetes, package = "SurvCorr")
