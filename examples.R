@@ -103,3 +103,21 @@ for(var_i in c("TRT_EYE", "LASER")){
 
 ### The plot above shows estimates of the partial rank correlation conditional on eye (left panel) and treatment (right panel). Interestingly, it appears that the correlation between the times to retinopathy for different eyes within the same patient was higher when the left eye was treated than when the right eye was treated. In contrast, there appears to be no difference in correlation between the two treatment groups.
 ###
+
+#####################################################################################
+### Two examples from the CCASAnet data with adult subjects only.
+cdata = get(load("CCASAnetData.rda"))
+
+### Unadjusted rho PSRs for site B
+siteBData = cdata[cdata$site == "B", ]
+res = unadjusted.CorPSRs(X = siteBData$timeToRegimenChange, Y = siteBData$timeToViralFailure,
+                         deltaX = siteBData$regimenChange, deltaY = siteBData$viralFailure)
+round(res[ c("est", "lower.CI", "upper.CI") ], 2)
+
+### Unadjusted rho PSRs for site D
+siteDData = cdata[cdata$site == "D", ]
+res = unadjusted.CorPSRs(X = siteDData$timeToRegimenChange, Y = siteDData$timeToViralFailure,
+                         deltaX = siteDData$regimenChange, deltaY = siteDData$viralFailure)
+round(res[ c("est", "lower.CI", "upper.CI") ], 2)
+
+

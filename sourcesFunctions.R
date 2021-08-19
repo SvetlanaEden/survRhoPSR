@@ -1620,27 +1620,28 @@ myOwnKM = function(time, delta, returnToOriginalOrder = TRUE){
     atRisk = c(length(time), length(time) - cumsum(nDrop))[1:length(nDrop)]
     probForEachTime = (1-nEvents/atRisk)
     dataKM = data.frame(time=uniqueAndOrderedTime, nEvents = nEvents, atRisk = atRisk, KM = cumprod(probForEachTime))
-    fit <- survfit(Surv(time, delta) ~ 1)  ### after some time this line should be removed
+    #fit <- survfit(Surv(time, delta) ~ 1)  ### after some time this line should be removed
     ### together with the next line (temporary check for my code against R's)
-    if(length(dataKM$KM) == length(fit$surv)){  ### sometimes myKM is longer than survfit
-      if( max(abs(dataKM$KM - fit$surv))>0.0001) {
-        problemData = list(uniqueAndOrderedTime = uniqueAndOrderedTime, df = data.frame(time = time, delta = delta), fit = fit, dataKM = dataKM)
-        fileName = gsub("[ :]", "_", paste("./RESULTS/problemData", Sys.time(),".rda"))
-        save(problemData, file = fileName, compress = TRUE)
-      }
-    }
-  }else{
-    ### not using this for now b/c it gave me trouble on ACCRE
-    ### it rounded up some of the time values, which caused problems when "stretching" KM
-    ### over time...
-    fit <- survfit(Surv(time, delta) ~ 1)
-    if(length(uniqueAndOrderedTime) != length(fit$n.event)){
-      problemData = list(uniqueAndOrderedTime = uniqueAndOrderedTime, fitN = fit$n.event, df = data.frame(time = time, delta = delta), survFit = fit)
-      save(problemData, file = "./RESULTS/problemData.rda", compress = TRUE)
-      stop("Saved problematic data\n")
-    }
-    dataKM = data.frame(time=uniqueAndOrderedTime, nEvents = fit$n.event, atRisk = fit$n.risk, KM = fit$surv)
+    # if(length(dataKM$KM) == length(fit$surv)){  ### sometimes myKM is longer than survfit
+    #   if( max(abs(dataKM$KM - fit$surv))>0.0001) {
+    #     problemData = list(uniqueAndOrderedTime = uniqueAndOrderedTime, df = data.frame(time = time, delta = delta), fit = fit, dataKM = dataKM)
+    #     fileName = gsub("[ :]", "_", paste("./RESULTS/problemData", Sys.time(),".rda"))
+    #     save(problemData, file = fileName, compress = TRUE)
+    #   }
+    # }
   }
+  # else{
+  #   ### not using this for now b/c it gave me trouble on ACCRE
+  #   ### it rounded up some of the time values, which caused problems when "stretching" KM
+  #   ### over time...
+  #   fit <- survfit(Surv(time, delta) ~ 1)
+  #   if(length(uniqueAndOrderedTime) != length(fit$n.event)){
+  #     problemData = list(uniqueAndOrderedTime = uniqueAndOrderedTime, fitN = fit$n.event, df = data.frame(time = time, delta = delta), survFit = fit)
+  #     save(problemData, file = "./RESULTS/problemData.rda", compress = TRUE)
+  #     stop("Saved problematic data\n")
+  #   }
+  #   dataKM = data.frame(time=uniqueAndOrderedTime, nEvents = fit$n.event, atRisk = fit$n.risk, KM = fit$surv)
+  # }
   dataKM$CDF = 1 - dataKM$KM
   # cat(nrow(dataKM), "\n")
   # cat(paste(dataKM$CDF, collapse = ", "), "\n")
